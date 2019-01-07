@@ -5,6 +5,7 @@
 class CGame
 {
 public:
+	////
 	//±≥æ∞Õº∆¨£®1’≈ / ∂‡’≈£©
 	IplImage * m_pBKImg;
 	IplImage * m_showImg;

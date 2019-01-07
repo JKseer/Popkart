@@ -9,5 +9,7 @@ int main()
 	CGame popkart;
 	popkart.Run();
     return 0;
+
+	/////
 }
 
