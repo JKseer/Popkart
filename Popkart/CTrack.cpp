@@ -8,31 +8,38 @@ CTrack::CTrack()
 
 CTrack::CTrack(int BKWidth, int BKHeight)
 {	
-	m_TrackStartL = cvPoint(BKWidth * 0.4, BKHeight * 0.28);
-	m_TrackStartR = cvPoint(BKWidth * 0.6, BKHeight * 0.28);
-	m_TrackEndL = cvPoint(0, BKHeight * 0.78);
-	m_TrackEndR = cvPoint(BKWidth, BKHeight * 0.78);
+	int TrackTop = BKHeight * 0.28;
+	int TrackBottom = BKHeight * 0.78;
+	m_TrackStartL = cvPoint(BKWidth * 0.4, TrackTop);
+	m_TrackStartR = cvPoint(BKWidth * 0.6, TrackTop);
+	m_TrackEndL = cvPoint(0, TrackBottom);
+	m_TrackEndR = cvPoint(BKWidth, TrackBottom);
 	
 	m_TrackColor = cvScalar(255,255,255);
 	
-	m_TrackWidth = 5;
+	m_TrackWidth = 8;
 	
-	m_LineStartL = cvPoint(BKWidth * 0.43, BKHeight * 0.7);
-	m_LineStartC = cvPoint(BKWidth * 0.57, BKHeight * 0.7);
-	m_LineStartR = cvPoint(BKWidth * 0.5, BKHeight * 0.7);
-	m_LineEndL = cvPoint(0, BKHeight * 0.9);
-	m_LineEndC = cvPoint(BKWidth, BKHeight * 0.9);
-	m_LineEndR = cvPoint(BKWidth * 0.5, BKHeight);
+	int LineTop = TrackTop;
+	int LineBottom = TrackBottom;
+	m_LineStartL = cvPoint(BKWidth * 0.44, LineTop);
+	m_LineStartC = cvPoint(BKWidth * 0.5, LineTop);
+	m_LineStartR = cvPoint(BKWidth * 0.56, LineTop);
+	m_LineEndL = cvPoint(0, LineBottom);
+	m_LineEndC = cvPoint(BKWidth * 0.5, BKHeight);
+	m_LineEndR = cvPoint(BKWidth, LineBottom);
 	
 	m_LineColor = cvScalar(0,255,255);
 	
 	m_LineWidth = 3;
-	
-	m_LineLength = BKHeight / 20;
 
-	int tempX = abs(m_LineStartL.x - m_LineEndL.x);
-	int tempY = abs(m_LineStartL.y - m_LineEndL.y);
-	m_Angle = atan(tempY / tempX);
+	double LineX = abs(m_LineStartL.x - m_LineEndL.x);
+	double LineY = abs(LineBottom - LineTop);
+	double Angle = atan(LineX / LineY);	
+
+	m_LineY = (BKHeight - TrackTop) / 9;
+	m_LineX = m_LineY * Angle;
+
+	m_LineRun = 0;
 }
 
 
@@ -42,16 +49,36 @@ CTrack::~CTrack()
 
 void CTrack::Move(char key)
 {
-
+	this->m_LineRun++;
+	if (this->m_LineRun == 5)
+		this->m_LineRun = 0;
 }
 
 void CTrack::Draw2BK(IplImage * pbkImg)
 {
 	cvLine(pbkImg, this->m_TrackStartL, this->m_TrackEndL,
 		this->m_TrackColor, this->m_TrackWidth, CV_AA);
-
 	cvLine(pbkImg, this->m_TrackStartR, this->m_TrackEndR,
 		this->m_TrackColor, this->m_TrackWidth, CV_AA);
-
-
+	CvPoint Start, End;
+	for (int i = 0; i < 10; i++) {
+		Start.y = m_LineStartC.y + m_LineY * (i + this->m_LineRun * 0.2);
+		End.y = Start.y + (int)(m_LineY * 0.5);
+		for (int j = 0; j < 3; j++) {
+			switch (j)
+			{
+			case 0:Start.x = m_LineStartL.x - m_LineX * (i + this->m_LineRun * 0.2);
+				End.x = Start.x - (int)(m_LineX * 0.5);
+				break;
+			case 1:Start.x = m_LineStartC.x;
+				End.x = Start.x;
+				break;
+			case 2:Start.x = m_LineStartR.x + m_LineX * (i + this->m_LineRun * 0.2);
+				End.x = Start.x + (int)(m_LineX * 0.5);
+				break;
+			}
+			cvLine(pbkImg, Start, End,
+				this->m_LineColor, this->m_LineWidth, CV_AA);
+		}
+	}
 }

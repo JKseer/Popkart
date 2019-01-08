@@ -18,10 +18,11 @@ public:
 	CvScalar m_LineColor;
 	//赛道线线宽
 	int m_LineWidth;
-	//每段虚线长
-	int m_LineLength;
-	//赛道线倾角
-	double m_Angle;
+	//每段虚线xy方向跨度
+	int m_LineY;
+	int m_LineX;
+	//控制赛道滚动
+	int m_LineRun;
 public:
 	CTrack();
 	CTrack(int BKWidth, int BKHeight);

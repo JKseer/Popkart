@@ -5,16 +5,16 @@
 class CGame
 {
 public:
-	////
 	//背景图片（1张 / 多张）
 	IplImage * m_pBKImg;
+	IplImage * m_openImg;
 	IplImage * m_showImg;
 	int m_Width;
 	int m_Height;
 	//小车
-	CCar m_Car;
+	CCar * m_Car;
 	//赛道
-	CTrack m_Track;
+	CTrack * m_Track;
 	//道具
 public:
 	CGame();

@@ -46,6 +46,7 @@ CCar::CCar(int BKWidth, int BKHeight)
 	m_BorderY = BKWidth;
 
 	m_Toward = 0;
+	//m_Shine = 0;
 }
 
 
@@ -60,23 +61,43 @@ CCar::~CCar()
 
 void CCar::Move(char key)
 {
-	if (this->m_Position.y > 0 && (this->m_Position.y + this->m_Image->width < this->m_BorderY)) {
-		if (((key == 'a') || (key == 'A')) && this->m_Position.y != 1) {
+	int ImgLeft = this->m_Position.y;
+	int ImgRight = this->m_Position.y + this->m_Image->width;
+	int BorderLeft = (int)(this->m_BorderY * 0.1);
+	int BorderRight = this->m_BorderY - BorderLeft;
+	if (ImgLeft > BorderLeft && ImgRight < BorderRight) {
+		if (((key == 'a') || (key == 'A')) 
+			&& (ImgLeft != BorderLeft + 1)) {
 			this->m_Position.y -= this->m_SpeedY;
 			this->m_Toward--;
 		}
 		else if (((key == 'd') || (key == 'D'))
-			&& (this->m_Position.y + this->m_Image->width != this->m_BorderY - 1)) {
+			&& (ImgRight != BorderRight - 1)) {
 			this->m_Position.y += this->m_SpeedY;
 			this->m_Toward++;
 		}
+		else if ((key == 'r') || (key == 'R')) {
+			this->m_Position.y = this->m_OriginPosition.y;
+			this->m_Toward = 0;
+		}
+	}
+}
+
+void CCar::Shake()
+{
+	int shake = rand() % 3;//随机抖动量
+	if (this->m_OriginPosition.x < this->m_Position.x) {
+		this->m_Position.x = this->m_OriginPosition.x - shake;
+	}
+	else {
+		this->m_Position.x = this->m_OriginPosition.x + shake;
 	}
 }
 
 void CCar::Draw2BK(IplImage * pbkImg)
 {
 	IplImage * img;
-	if (m_Toward > 15) {
+	if (m_Toward > 20) {
 		if (m_Toward < 60) {
 			img = m_RightImage;
 		}
@@ -84,7 +105,7 @@ void CCar::Draw2BK(IplImage * pbkImg)
 			img = m_RRightImage;
 		}
 	}
-	else if (m_Toward < -15) {
+	else if (m_Toward < -20) {
 		if (m_Toward > -60) {
 			img = m_LeftImage;
 		}
@@ -92,19 +113,11 @@ void CCar::Draw2BK(IplImage * pbkImg)
 			img = m_LLeftImage;
 		}
 	}
-	else
-		img = m_Image;
-	
-	int shake = rand() * 3 / (RAND_MAX + 1);
-	//抖动
-	if (this->m_OriginPosition.x < this->m_Position.x) {
-		this->m_Position.x = this->m_OriginPosition.x - shake;
-	}
 	else {
-		this->m_Position.x = this->m_OriginPosition.x + shake;
+		img = m_Image;
 	}
-
-	CTools::Draw2BK(pbkImg,
-		img, this->m_Position.x,
+	Shake();
+	CTools::Draw2BK(pbkImg ,
+		img , this->m_Position.x,
 		this->m_Position.y, 0, 255, 0);
 }

@@ -10,7 +10,6 @@ public:
 	IplImage * m_RightImage;
 	IplImage * m_LLeftImage;
 	IplImage * m_RRightImage;
-	int m_ImgIndex;
 	//速度（x,y）
 	int m_SpeedX;
 	int m_SpeedY;
@@ -24,12 +23,15 @@ public:
 	int m_BorderY;
 	//运动状态（开始结束标志）
 	int m_Toward; //方向标志,为0直行,为正向右，为负向左
+	//int m_Shine;  //控制闪烁
 public:
 	CCar();
 	CCar(int BKWidth, int BKHeight);
 	~CCar();
 	//移动
 	void Move(char key);
+	//抖动
+	void Shake();
 	//吃道具
 	//音效 
 	//绘制

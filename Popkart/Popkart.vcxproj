@@ -148,6 +148,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Award.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="stdafx.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Track.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CAward.cpp" />
     <ClCompile Include="CCar.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CTools.cpp" />
