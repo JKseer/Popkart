@@ -28,7 +28,7 @@ CTrack::CTrack(int BKWidth, int BKHeight)
 	m_LineEndC = cvPoint(BKWidth * 0.5, BKHeight);
 	m_LineEndR = cvPoint(BKWidth, LineBottom);
 	
-	m_LineColor = cvScalar(0,255,255);
+	m_LineColor = cvScalar(255,255,255);
 	
 	m_LineWidth = 3;
 
@@ -36,8 +36,8 @@ CTrack::CTrack(int BKWidth, int BKHeight)
 	double LineY = abs(LineBottom - LineTop);
 	double Angle = atan(LineX / LineY);	
 
-	m_LineY = (BKHeight - TrackTop) / 9;
-	m_LineX = m_LineY * Angle;
+	m_SpeedY = (BKHeight - TrackTop) / 9 * 0.2;
+	m_SpeedX = m_SpeedY * Angle;
 
 	m_LineRun = 0;
 }
@@ -47,7 +47,7 @@ CTrack::~CTrack()
 {
 }
 
-void CTrack::Move(char key)
+void CTrack::Move()
 {
 	this->m_LineRun++;
 	if (this->m_LineRun == 5)
@@ -60,21 +60,22 @@ void CTrack::Draw2BK(IplImage * pbkImg)
 		this->m_TrackColor, this->m_TrackWidth, CV_AA);
 	cvLine(pbkImg, this->m_TrackStartR, this->m_TrackEndR,
 		this->m_TrackColor, this->m_TrackWidth, CV_AA);
+
 	CvPoint Start, End;
 	for (int i = 0; i < 10; i++) {
-		Start.y = m_LineStartC.y + m_LineY * (i + this->m_LineRun * 0.2);
-		End.y = Start.y + (int)(m_LineY * 0.5);
+		Start.y = m_LineStartC.y + m_SpeedY * (5 * i + this->m_LineRun);
+		End.y = Start.y + (int)(m_SpeedY * 2.5);
 		for (int j = 0; j < 3; j++) {
 			switch (j)
 			{
-			case 0:Start.x = m_LineStartL.x - m_LineX * (i + this->m_LineRun * 0.2);
-				End.x = Start.x - (int)(m_LineX * 0.5);
+			case 0:Start.x = m_LineStartL.x - m_SpeedX * (5 * i + this->m_LineRun);
+				End.x = Start.x - (int)(m_SpeedX * 2.5);
 				break;
 			case 1:Start.x = m_LineStartC.x;
 				End.x = Start.x;
 				break;
-			case 2:Start.x = m_LineStartR.x + m_LineX * (i + this->m_LineRun * 0.2);
-				End.x = Start.x + (int)(m_LineX * 0.5);
+			case 2:Start.x = m_LineStartR.x + m_SpeedX * (5 * i + this->m_LineRun);
+				End.x = Start.x + (int)(m_SpeedX * 2.5);
 				break;
 			}
 			cvLine(pbkImg, Start, End,

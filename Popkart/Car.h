@@ -33,6 +33,7 @@ public:
 	//抖动
 	void Shake();
 	//吃道具
+	void Catch(bool flag);
 	//音效 
 	//绘制
 	void Draw2BK(IplImage * pbkImg);

@@ -19,8 +19,8 @@ public:
 	//赛道线线宽
 	int m_LineWidth;
 	//每段虚线xy方向跨度
-	int m_LineY;
-	int m_LineX;
+	int m_SpeedY;
+	int m_SpeedX;
 	//控制赛道滚动
 	int m_LineRun;
 public:
@@ -28,7 +28,7 @@ public:
 	CTrack(int BKWidth, int BKHeight);
 	~CTrack();
 	//移动
-	void Move(char key);
+	void Move();
 	//绘制
 	void Draw2BK(IplImage * pbkImg);
 };

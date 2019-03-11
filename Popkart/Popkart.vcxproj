@@ -155,6 +155,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tools.h" />
     <ClInclude Include="Track.h" />
+    <ClInclude Include="Tree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAward.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CTools.cpp" />
     <ClCompile Include="CTrack.cpp" />
+    <ClCompile Include="CTree.cpp" />
     <ClCompile Include="Popkart.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
